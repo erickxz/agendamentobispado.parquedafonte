@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import styles from "@/app/admin/login/login.module.css";
 
 export function LoginForm({ next }: { next: string }) {
-  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -33,8 +31,10 @@ export function LoginForm({ next }: { next: string }) {
         body: JSON.stringify({ password }),
       });
       if (res.ok) {
-        router.replace(next);
-        router.refresh();
+        // Navegação completa: garante que o cookie novo vá na requisição e descarta o cache do
+        // roteador (que guardou o redirecionamento para o login). router.replace + router.refresh
+        // concorriam entre si e, na primeira vez, o refresh da tela de login cancelava a navegação.
+        window.location.replace(next);
         return;
       }
       const data = (await res.json().catch(() => ({}))) as { error?: string };
@@ -42,9 +42,9 @@ export function LoginForm({ next }: { next: string }) {
       inputRef.current?.select();
     } catch {
       setError("Sem conexão. Verifique sua internet e tente novamente.");
-    } finally {
-      setSubmitting(false);
     }
+    // Só reativa o botão em caso de erro; no sucesso ele fica "Entrando…" até a página trocar.
+    setSubmitting(false);
   }
 
   return (
