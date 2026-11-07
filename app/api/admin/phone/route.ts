@@ -6,7 +6,7 @@ import { phoneUpdateSchema } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
 
-/** Salva o WhatsApp de uma entrevista criada à mão na agenda. */
+/** Salva ou corrige o WhatsApp de uma entrevista. */
 export async function POST(request: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: "Sessão expirada. Entre novamente." }, { status: 401 });
 

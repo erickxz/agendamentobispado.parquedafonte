@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import type { AdminDayDto, AdminSlotDto } from "@/lib/presenters";
 import { ConfirmDialog } from "../ConfirmDialog";
 import styles from "./AvailabilityManager.module.css";
+import { DateField, TimeField, addDays, timeOptions, todayKey } from "./PickerFields";
 
 type LoadState = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; days: AdminDayDto[] };
 
@@ -16,6 +17,9 @@ type MarkRequest =
 const MAX_DAYS = 180;
 const STEP_DAYS = 28;
 const FORM_KEY = "form";
+const ALL_TIMES = timeOptions(6, 23);
+const FROM_OPTIONS = ALL_TIMES.slice(0, -1); // começar até 22:30
+const TO_OPTIONS = ALL_TIMES.slice(1); // terminar a partir de 06:30
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -350,10 +354,22 @@ function OpeningForm({
   const [from, setFrom] = useState("19:00");
   const [to, setTo] = useState("21:30");
   const [done, setDone] = useState(false);
+  const [missingDate, setMissingDate] = useState(false);
+  const today = todayKey();
+
+  /** Mudar o início para depois do fim empurra o fim junto (mantém pelo menos 30 min). */
+  function changeFrom(value: string) {
+    setFrom(value);
+    if (to <= value) setTo(FROM_OPTIONS[FROM_OPTIONS.indexOf(value) + 1] ?? TO_OPTIONS[TO_OPTIONS.length - 1]);
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setDone(false);
+    if (!date) {
+      setMissingDate(true);
+      return;
+    }
     if (await onSubmit(date, from, to)) {
       setDone(true);
       setDate("");
@@ -378,19 +394,25 @@ function OpeningForm({
         </p>
       </div>
       <div className={styles.formRow}>
-        <label>
-          Data
-          <input type="date" required value={date} onChange={(e) => setDate(e.target.value)} />
-        </label>
-        <label>
-          Das
-          <input type="time" required step={1800} value={from} onChange={(e) => setFrom(e.target.value)} />
-        </label>
-        <label>
-          Até
-          <input type="time" required step={1800} value={to} onChange={(e) => setTo(e.target.value)} />
-        </label>
+        <DateField
+          label="Data"
+          value={date}
+          min={today}
+          max={addDays(today, MAX_DAYS)}
+          invalid={missingDate && !date}
+          onChange={(d) => {
+            setDate(d);
+            setMissingDate(false);
+          }}
+        />
+        <TimeField label="Das" value={from} options={FROM_OPTIONS} onChange={changeFrom} />
+        <TimeField label="Até" value={to} options={TO_OPTIONS.filter((t) => t > from)} onChange={setTo} />
       </div>
+      {missingDate && !date && (
+        <p className="alert alert-error" role="alert">
+          Escolha o dia.
+        </p>
+      )}
       <p className={styles.dayMeta}>&ldquo;Até&rdquo; é quando a última entrevista termina.</p>
       {error && (
         <p className="alert alert-error" role="alert">

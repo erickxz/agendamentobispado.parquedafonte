@@ -253,38 +253,14 @@
   }
 }
 
-.formRow label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.formRow label:first-child {
+.formRow > :first-child {
   grid-column: 1 / -1;
 }
 
 @media (min-width: 640px) {
-  .formRow label:first-child {
+  .formRow > :first-child {
     grid-column: auto;
   }
-}
-
-.formRow input {
-  min-height: 48px;
-  padding: 0 12px;
-  border: 1px solid #b8c1cc;
-  border-radius: var(--radius-control);
-  background: var(--surface);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.formRow input:focus-visible {
-  border-color: var(--sky);
-  outline: 2px solid var(--sky);
-  outline-offset: 0;
 }
 
 .formActions {

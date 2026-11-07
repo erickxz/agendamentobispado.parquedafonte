@@ -128,15 +128,15 @@ export function ReminderList() {
                     {item.telefone && ` · ${item.telefone}`}
                     {item.origem === "manual" && " · criada na agenda"}
                   </span>
-                  {!item.telefone && (
-                    <PhoneForm
-                      eventId={item.eventId}
-                      onSaved={(telefone) => {
-                        updateItem(item.eventId, { telefone });
-                        void fetchItems(range, true); // recarrega para o link do WhatsApp sair com o número
-                      }}
-                    />
-                  )}
+                  <PhoneForm
+                    key={`${item.eventId}:${item.telefone}`}
+                    eventId={item.eventId}
+                    current={item.telefone}
+                    onSaved={(telefone) => {
+                      updateItem(item.eventId, { telefone });
+                      void fetchItems(range, true); // recarrega para o link do WhatsApp sair com o número
+                    }}
+                  />
                   {itemErrors[item.eventId] && <span className={styles.itemError}>{itemErrors[item.eventId]}</span>}
                 </div>
                 <div className={styles.actions}>
@@ -170,10 +170,18 @@ export function ReminderList() {
   );
 }
 
-/** Campo para salvar o WhatsApp de uma entrevista criada à mão na agenda. */
-function PhoneForm({ eventId, onSaved }: { eventId: string; onSaved: (telefone: string) => void }) {
+/** Campo para adicionar o WhatsApp de uma entrevista sem telefone, ou corrigir o que já foi informado. */
+function PhoneForm({
+  eventId,
+  current,
+  onSaved,
+}: {
+  eventId: string;
+  current: string;
+  onSaved: (telefone: string) => void;
+}) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(current);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -197,12 +205,18 @@ function PhoneForm({ eventId, onSaved }: { eventId: string; onSaved: (telefone: 
     }
   }
 
+  function cancel() {
+    setValue(current);
+    setError(null);
+    setOpen(false);
+  }
+
   if (!open) {
     return (
       <span className={styles.noPhone}>
-        Sem telefone no evento.{" "}
+        {!current && "Sem telefone no evento. "}
         <button type="button" className="link-button" onClick={() => setOpen(true)}>
-          Adicionar WhatsApp
+          {current ? "Editar número" : "Adicionar WhatsApp"}
         </button>
       </span>
     );
@@ -225,7 +239,7 @@ function PhoneForm({ eventId, onSaved }: { eventId: string; onSaved: (telefone: 
       <button type="submit" className="btn btn-secondary" disabled={saving}>
         {saving ? "Salvando…" : "Salvar"}
       </button>
-      <button type="button" className="link-button" onClick={() => setOpen(false)}>
+      <button type="button" className="link-button" onClick={cancel}>
         Cancelar
       </button>
       {error && <span className={styles.itemError}>{error}</span>}

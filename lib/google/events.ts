@@ -191,11 +191,24 @@ export async function listBookings(timeMin: DateTime, timeMax: DateTime): Promis
   return bookings;
 }
 
-/** Troca a linha "Rótulo: ..." da descrição, ou acrescenta no fim se ainda não existir. */
-function upsertDescriptionLine(description: string, label: string, value: string): string {
-  const line = `${label}: ${value}`;
-  const re = new RegExp(`^${label}: .*$`, "m");
-  return re.test(description) ? description.replace(re, line) : [description.trimEnd(), line].filter(Boolean).join("\n");
+/**
+ * Troca a linha "Rótulo: ..." da descrição, ou acrescenta no fim se ainda não existir.
+ * `aliases` são rótulos antigos/equivalentes: se um deles já estiver na descrição, a linha dele é trocada
+ * (mantendo o rótulo original), para não deixar duas linhas com a mesma informação.
+ * `value` null remove a linha.
+ */
+function upsertDescriptionLine(
+  description: string,
+  label: string,
+  value: string | null,
+  aliases: string[] = [],
+): string {
+  if (value === null) return description.replace(new RegExp(`^${label}: .*(\\r?\\n|$)`, "m"), "").trimEnd();
+  for (const l of [label, ...aliases]) {
+    const re = new RegExp(`^${l}: .*$`, "m");
+    if (re.test(description)) return description.replace(re, `${l}: ${value}`);
+  }
+  return [description.trimEnd(), `${label}: ${value}`].filter(Boolean).join("\n");
 }
 
 /**
@@ -205,7 +218,7 @@ function upsertDescriptionLine(description: string, label: string, value: string
 async function patchBookingProps(
   eventId: string,
   changes: Record<string, string>,
-  descriptionLine?: { label: string; value: string },
+  descriptionLine?: { label: string; value: string | null; aliases?: string[] },
 ): Promise<boolean> {
   const { calendar, calendarId } = getCalendar();
   const existing = await getEventOrNull(calendar, calendarId, eventId);
@@ -215,7 +228,12 @@ async function patchBookingProps(
     extendedProperties: { private: { ...existing.extendedProperties?.private, ...changes } },
   };
   if (descriptionLine) {
-    requestBody.description = upsertDescriptionLine(existing.description ?? "", descriptionLine.label, descriptionLine.value);
+    requestBody.description = upsertDescriptionLine(
+      existing.description ?? "",
+      descriptionLine.label,
+      descriptionLine.value,
+      descriptionLine.aliases,
+    );
   }
   await calendar.events.patch({ calendarId, eventId, requestBody });
   return true;
@@ -236,14 +254,28 @@ export function formatSentAt(at: DateTime): string {
   return at.setZone(TZ).toFormat("dd/MM 'às' HH:mm");
 }
 
-/** Salva o WhatsApp de uma entrevista (campo interno + linha na descrição do evento). */
+/**
+ * Salva ou corrige o WhatsApp de uma entrevista (campo interno + linha na descrição do evento).
+ * Entrevistas do site já têm "Telefone: ..." na descrição; nesse caso essa linha é atualizada.
+ */
 export async function setPhone(eventId: string, e164: string): Promise<boolean> {
   if (isMockCalendar()) return mockSetPhone(eventId, e164);
-  return patchBookingProps(eventId, { telefone: e164 }, { label: "WhatsApp", value: formatE164ForDisplay(e164) });
+  return patchBookingProps(
+    eventId,
+    { telefone: e164 },
+    { label: "WhatsApp", value: formatE164ForDisplay(e164), aliases: ["Telefone"] },
+  );
 }
 
-/** Registra se o membro compareceu (histórico). `null` limpa o registro. */
+/**
+ * Registra se o membro compareceu (histórico): campo interno + linha "Compareceu: Sim/Não" na descrição,
+ * para o bispo ver na própria agenda. `null` limpa o registro e remove a linha.
+ */
 export async function setAttendance(eventId: string, value: Attendance): Promise<boolean> {
   if (isMockCalendar()) return mockSetAttendance(eventId, value);
-  return patchBookingProps(eventId, { compareceu: value ?? "" });
+  return patchBookingProps(
+    eventId,
+    { compareceu: value ?? "" },
+    { label: "Compareceu", value: value === "sim" ? "Sim" : value === "nao" ? "Não" : null },
+  );
 }

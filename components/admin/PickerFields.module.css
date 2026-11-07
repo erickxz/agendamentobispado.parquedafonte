@@ -1,0 +1,267 @@
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ---------- Botão que abre o seletor (no lugar do input do navegador) ---------- */
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid #b8c1cc;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 16px;
+  text-align: left;
+  transition:
+    border-color var(--motion) ease,
+    box-shadow var(--motion) ease;
+}
+
+.trigger:hover {
+  border-color: var(--navy);
+}
+
+.trigger:focus-visible,
+.triggerOpen {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 1px var(--sky);
+  outline: none;
+}
+
+.trigger[aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 1px var(--danger);
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--sky-ink);
+  flex-shrink: 0;
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.placeholder {
+  color: var(--muted);
+}
+
+.caret {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform var(--motion) ease;
+}
+
+.triggerOpen .caret {
+  transform: rotate(180deg);
+}
+
+/* ---------- Painel flutuante ---------- */
+
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow:
+    0 12px 32px rgb(18 35 58 / 0.14),
+    0 2px 6px rgb(18 35 58 / 0.08);
+  animation: pop var(--motion) ease-out;
+}
+
+.popover:focus {
+  outline: none;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popover {
+    animation: none;
+  }
+}
+
+/* ---------- Calendário ---------- */
+
+.calendar {
+  width: min(300px, calc(100vw - 2 * var(--gutter)));
+  padding: 12px;
+}
+
+.calHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.calTitle {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--navy);
+}
+
+.navBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--navy);
+  transition:
+    background-color var(--motion) ease,
+    border-color var(--motion) ease;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: var(--sky-soft);
+}
+
+.navBtn:disabled {
+  color: var(--disabled-ink);
+  cursor: not-allowed;
+}
+
+.weekdays,
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.weekdays span {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 4px 0;
+}
+
+.day {
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--motion) ease,
+    color var(--motion) ease;
+}
+
+.day:hover:not(:disabled):not(.daySelected) {
+  background: var(--sky-soft);
+  color: var(--navy);
+}
+
+.day:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 1px;
+}
+
+.day:disabled {
+  color: var(--disabled-ink);
+  cursor: not-allowed;
+}
+
+.dayToday {
+  border-color: var(--sky);
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.daySelected {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  font-weight: 600;
+}
+
+.calFooter {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+
+.calFooter :global(.link-button) {
+  min-height: 36px;
+}
+
+/* ---------- Lista de horários ---------- */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  width: 100%;
+  min-width: 132px;
+  max-height: 248px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--radius-control);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.optionActive {
+  background: var(--sky-soft);
+  color: var(--navy);
+}
+
+.optionSelected {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.optionSelected svg {
+  color: var(--sky-ink);
+}
