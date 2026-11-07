@@ -168,3 +168,22 @@
   padding-top: 14px;
   border-top: 1px solid var(--line);
 }
+
+/* Página de uma coluna só (ex.: Minhas entrevistas) */
+.single {
+  max-width: 680px;
+  padding-top: 24px;
+  padding-bottom: 56px;
+}
+
+@media (min-width: 640px) {
+  .single {
+    padding-top: 36px;
+  }
+}
+
+.mastheadLink {
+  display: inline-block;
+  margin-top: 14px;
+  font-weight: 600;
+}

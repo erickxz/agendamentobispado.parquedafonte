@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { availability, mapsUrl, scheduleSummary } from "@/config/availability";
 import { BookingFlow } from "@/components/BookingFlow";
 import { getTurnstileSiteKey } from "@/lib/env";
@@ -25,6 +26,9 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             Escolha um dia e um horário livre. A entrevista entra direto na agenda do bispado e você recebe a confirmação
             na hora.
           </p>
+          <Link href="/minhas-entrevistas" className={styles.mastheadLink}>
+            Já marcou? Ver, remarcar ou cancelar
+          </Link>
         </div>
       </div>
 
@@ -78,13 +82,17 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             </li>
           </ol>
           <p className={styles.help}>
-            Precisa remarcar ou cancelar?{" "}
-            {secretary ? (
-              <a href={`https://wa.me/${secretary}`} target="_blank" rel="noopener noreferrer">
-                Fale com o secretário da ala
-              </a>
-            ) : (
-              "Fale com o secretário da ala."
+            Precisa remarcar ou cancelar? <Link href="/minhas-entrevistas">Acesse Minhas entrevistas</Link> com o seu
+            WhatsApp.
+            {secretary && (
+              <>
+                {" "}
+                Dúvidas?{" "}
+                <a href={`https://wa.me/${secretary}`} target="_blank" rel="noopener noreferrer">
+                  Fale com o secretário da ala
+                </a>
+                .
+              </>
             )}
           </p>
         </aside>

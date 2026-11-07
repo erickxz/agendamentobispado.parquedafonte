@@ -57,3 +57,38 @@ export function sessionCookieOptions(maxAge = SESSION_MAX_AGE_SECONDS) {
     maxAge,
   };
 }
+
+/* ---------- Sessão do membro (entra só com o telefone) ---------- */
+
+export const MEMBER_COOKIE = "ala_membro";
+export const MEMBER_MAX_AGE_SECONDS = 60 * 24 * 60 * 60; // 60 dias: o membro não precisa entrar de novo a cada visita
+
+/** Cookie "<telefone E.164>.<expiração>.<assinatura>". Assinado para ninguém trocar o telefone no navegador. */
+export async function createMemberToken(phone: string, secret: string, nowMs = Date.now()): Promise<string> {
+  const exp = Math.floor(nowMs / 1000) + MEMBER_MAX_AGE_SECONDS;
+  return `${phone}.${exp}.${await hmac(secret, `member.${phone}.${exp}`)}`;
+}
+
+/** Telefone da sessão, ou null se o cookie for inválido/expirado. */
+export async function verifyMemberToken(
+  token: string | undefined,
+  secret: string,
+  nowMs = Date.now(),
+): Promise<string | null> {
+  if (!token) return null;
+  const [phone, expStr, sig] = token.split(".");
+  const exp = Number(expStr);
+  if (!phone || !/^\d{12,13}$/.test(phone) || !sig || !Number.isInteger(exp) || exp * 1000 < nowMs) return null;
+  return constantTimeEqual(sig, await hmac(secret, `member.${phone}.${exp}`)) ? phone : null;
+}
+
+export function memberCookieOptions(maxAge = MEMBER_MAX_AGE_SECONDS) {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    // "lax" para o cookie ir junto quando o membro abre o site por um link (ex.: WhatsApp).
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge,
+  };
+}

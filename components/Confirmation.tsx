@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import type { BookingConfirmationDto } from "@/lib/presenters";
 import styles from "./Confirmation.module.css";
@@ -72,7 +73,10 @@ export function Confirmation({ booking, onNew }: Props) {
           <ul>
             <li>Você receberá um lembrete pelo WhatsApp no dia anterior.</li>
             <li>Chegue alguns minutos antes do horário.</li>
-            <li>Se não puder comparecer, avise o secretário da ala para liberar o horário.</li>
+            <li>
+              Se não puder comparecer, <Link href="/minhas-entrevistas">remarque ou cancele em Minhas entrevistas</Link>{" "}
+              para liberar o horário.
+            </li>
           </ul>
         </div>
 

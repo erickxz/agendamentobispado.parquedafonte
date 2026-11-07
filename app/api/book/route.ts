@@ -3,6 +3,7 @@ import { availability, locationText, mapsUrl } from "@/config/availability";
 import { createBookingEvent } from "@/lib/google/events";
 import { getBusyIntervals, invalidateBusyCache } from "@/lib/google/freebusy";
 import { listMarks } from "@/lib/google/marks";
+import { setMemberCookie } from "@/lib/memberAuth";
 import { icsPath, memberGoogleCalendarUrl } from "@/lib/memberCalendar";
 import type { BookingConfirmationDto } from "@/lib/presenters";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
@@ -83,7 +84,10 @@ export async function POST(request: NextRequest) {
       googleCalendarUrl: memberGoogleCalendarUrl(slot),
       icsUrl: icsPath(slot),
     };
-    return NextResponse.json({ booking: confirmation }, { status: 201, headers: { "Cache-Control": "no-store" } });
+    const response = NextResponse.json({ booking: confirmation }, { status: 201, headers: { "Cache-Control": "no-store" } });
+    // Já deixa o membro "entrado" na área Minhas entrevistas (mesmo telefone que acabou de confirmar).
+    await setMemberCookie(response, telefone).catch((err) => console.error("[api/book] cookie do membro", err));
+    return response;
   } catch (err) {
     console.error("[api/book] erro ao criar evento", err);
     return error(503, "Não foi possível marcar agora. Tente novamente em alguns minutos.", "server");

@@ -89,3 +89,22 @@ export interface HistoryItemDto {
   timeLabel: string;
   compareceu: "sim" | "nao" | null;
 }
+
+/** Entrevista vista pelo próprio membro (quem entrou com o telefone usado ao marcar). */
+export interface MemberAppointmentDto {
+  eventId: string;
+  nome: string; // nome informado ao marcar (o mesmo WhatsApp pode marcar para pessoas diferentes da família)
+  start: string;
+  dateLabel: string; // "domingo, 8 de novembro"
+  timeLabel: string;
+  endTimeLabel: string;
+  weekday: string;
+  day: string;
+  month: string;
+  location: string;
+  mapsUrl: string;
+  googleCalendarUrl: string;
+  icsUrl: string;
+  /** false para entrevistas criadas pelo bispado direto na agenda: só o secretário muda. */
+  canChange: boolean;
+}

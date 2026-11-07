@@ -96,3 +96,20 @@ export const adminAvailabilityQuerySchema = z.object({
 export const appointmentsQuerySchema = z.object({
   range: z.enum(["today", "tomorrow", "week"]).default("tomorrow"),
 });
+
+/* ---------- Área do membro (entra só com o telefone) ---------- */
+
+export const memberLoginSchema = z.object({
+  telefone: phoneSchema,
+  /** Honeypot: precisa chegar vazio. */
+  website: z.string().max(200).optional(),
+});
+
+export const memberCancelSchema = z.object({
+  eventId: eventIdSchema,
+});
+
+export const memberRescheduleSchema = z.object({
+  eventId: eventIdSchema,
+  start: z.string().min(16).max(40),
+});

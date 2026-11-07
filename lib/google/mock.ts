@@ -140,25 +140,39 @@ export async function mockCreate(eventId: string, slot: Slot, nome: string, tele
   return { status: "created", eventId };
 }
 
+type MockBooking = Extract<MockEvent, { kind: "booking" }>;
+
+function toBooking(e: MockBooking): Booking {
+  return {
+    eventId: e.id,
+    start: e.start,
+    end: e.end,
+    nome: e.nome,
+    telefone: e.telefone,
+    lembreteEnviado: e.lembreteEnviado,
+    lembreteEnviadoEm: e.lembreteEnviadoEm ?? null,
+    compareceu: e.compareceu,
+    origem: "site",
+  };
+}
+
 export async function mockList(timeMin: DateTime, timeMax: DateTime): Promise<Booking[]> {
   await delay();
-  return overlapping(timeMin, timeMax).flatMap((e) =>
-    e.kind === "booking" && e.start >= timeMin
-      ? [
-          {
-            eventId: e.id,
-            start: e.start,
-            end: e.end,
-            nome: e.nome,
-            telefone: e.telefone,
-            lembreteEnviado: e.lembreteEnviado,
-            lembreteEnviadoEm: e.lembreteEnviadoEm ?? null,
-            compareceu: e.compareceu,
-            origem: "site" as const,
-          },
-        ]
-      : [],
-  );
+  return overlapping(timeMin, timeMax).flatMap((e) => (e.kind === "booking" && e.start >= timeMin ? [toBooking(e)] : []));
+}
+
+export async function mockGet(eventId: string): Promise<Booking | null> {
+  await delay();
+  const ev = events().get(eventId);
+  return ev?.kind === "booking" ? toBooking(ev) : null;
+}
+
+export async function mockCancel(eventId: string): Promise<boolean> {
+  await delay();
+  const map = events();
+  if (map.get(eventId)?.kind !== "booking") return false;
+  map.delete(eventId);
+  return true;
 }
 
 export async function mockMarkSent(eventId: string, at: DateTime): Promise<boolean> {

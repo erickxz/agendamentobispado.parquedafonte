@@ -8,7 +8,16 @@ import { formatE164ForDisplay, toE164 } from "../phone";
 import type { Slot } from "../slots";
 import { TZ } from "../time";
 import { getCalendar, httpStatusOf } from "./client";
-import { isMockCalendar, mockCreate, mockList, mockMarkSent, mockSetAttendance, mockSetPhone } from "./mock";
+import {
+  isMockCalendar,
+  mockCancel,
+  mockCreate,
+  mockGet,
+  mockList,
+  mockMarkSent,
+  mockSetAttendance,
+  mockSetPhone,
+} from "./mock";
 
 export const EVENT_SOURCE = "agendamento-ala";
 const MAX_ID_ATTEMPTS = 5;
@@ -189,6 +198,28 @@ export async function listBookings(timeMin: DateTime, timeMax: DateTime): Promis
   } while (pageToken);
 
   return bookings;
+}
+
+/** Uma entrevista pelo ID do evento (null se não existir, foi cancelada ou não é entrevista). */
+export async function getBooking(eventId: string): Promise<Booking | null> {
+  if (isMockCalendar()) return mockGet(eventId);
+  const { calendar, calendarId } = getCalendar();
+  const ev = await getEventOrNull(calendar, calendarId, eventId);
+  return ev ? toBooking(ev) : null;
+}
+
+/** Cancela (exclui) a entrevista na agenda. Retorna false se ela já não existia. */
+export async function cancelBooking(eventId: string): Promise<boolean> {
+  if (isMockCalendar()) return mockCancel(eventId);
+  const { calendar, calendarId } = getCalendar();
+  try {
+    await calendar.events.delete({ calendarId, eventId });
+    return true;
+  } catch (err) {
+    const status = httpStatusOf(err);
+    if (status === 404 || status === 410) return false;
+    throw err;
+  }
 }
 
 /**
