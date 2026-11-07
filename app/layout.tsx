@@ -19,7 +19,10 @@ const sans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: "Marcar entrevista com o bispado · Ala Parque da Fonte",
+  title: {
+    default: "Agendamento Bispado Parque da Fonte",
+    template: "%s · Agendamento Bispado Parque da Fonte",
+  },
   description: "Agendamento de entrevistas com o bispado da Ala Parque da Fonte, São José dos Pinhais – PR.",
   robots: { index: false, follow: false },
 };

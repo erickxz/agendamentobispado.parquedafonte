@@ -5,7 +5,7 @@ import { ReminderList } from "@/components/admin/ReminderList";
 import { isAdmin } from "@/lib/adminAuth";
 import styles from "../admin.module.css";
 
-export const metadata: Metadata = { title: "Lembretes · Painel da secretaria" };
+export const metadata: Metadata = { title: "Lembretes" };
 export const dynamic = "force-dynamic";
 
 export default async function RemindersPage() {

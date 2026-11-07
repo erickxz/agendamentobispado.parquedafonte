@@ -6,7 +6,7 @@ import { availability } from "@/config/availability";
 import { isAdmin } from "@/lib/adminAuth";
 import styles from "../admin.module.css";
 
-export const metadata: Metadata = { title: "Disponibilidade · Painel da secretaria" };
+export const metadata: Metadata = { title: "Disponibilidade" };
 export const dynamic = "force-dynamic";
 
 export default async function AvailabilityPage() {

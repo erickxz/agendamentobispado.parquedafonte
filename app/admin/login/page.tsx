@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LoginForm } from "@/components/admin/LoginForm";
 import styles from "./login.module.css";
 
-export const metadata: Metadata = { title: "Entrar · Painel da secretaria" };
+export const metadata: Metadata = { title: "Entrar no painel" };
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 

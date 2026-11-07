@@ -5,7 +5,7 @@ import { HistoryList } from "@/components/admin/HistoryList";
 import { isAdmin } from "@/lib/adminAuth";
 import styles from "../admin.module.css";
 
-export const metadata: Metadata = { title: "Histórico · Painel da secretaria" };
+export const metadata: Metadata = { title: "Histórico" };
 export const dynamic = "force-dynamic";
 
 export default async function HistoryPage() {
