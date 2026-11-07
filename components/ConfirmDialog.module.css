@@ -1,0 +1,69 @@
+.dialog {
+  width: min(440px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--navy);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.dialog::backdrop {
+  background: rgb(18 35 58 / 0.45);
+}
+
+.dialog[open] {
+  animation: appear 180ms ease-out;
+}
+
+.content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.title {
+  font-size: 20px;
+}
+
+.body {
+  color: var(--ink);
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.body ul {
+  margin: 0;
+  padding: 10px 14px 10px 30px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+}
+
+.body p {
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+@media (min-width: 480px) {
+  .actions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

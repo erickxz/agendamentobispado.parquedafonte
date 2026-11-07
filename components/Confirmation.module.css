@@ -1,0 +1,208 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  animation: appear 200ms ease-out;
+}
+
+.status {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px var(--gutter);
+  background: var(--success-soft);
+  border-bottom: 1px solid color-mix(in srgb, var(--success) 25%, transparent);
+}
+
+@media (min-width: 640px) {
+  .status {
+    padding: 24px 28px;
+  }
+}
+
+/* Marca de confirmação desenhada em CSS */
+.check {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+}
+
+.check::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 7px;
+  width: 7px;
+  height: 14px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.title {
+  font-size: 24px;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.subtitle {
+  margin-top: 2px;
+  color: var(--success);
+}
+
+.body {
+  padding: 24px var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+@media (min-width: 640px) {
+  .body {
+    padding: 28px;
+  }
+}
+
+.summary {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.dateTile {
+  flex-shrink: 0;
+  width: 76px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-start;
+  text-align: center;
+}
+
+.tileMonth {
+  align-self: stretch;
+  background: var(--navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 0;
+}
+
+.tileDay {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.15;
+  color: var(--navy);
+  padding-top: 6px;
+}
+
+.tileWeekday {
+  font-size: 13px;
+  color: var(--muted);
+  padding-bottom: 8px;
+}
+
+.details {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.details > div {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.details > div:first-child {
+  padding-top: 0;
+}
+
+.details > div:last-child {
+  border-bottom: 0;
+}
+
+.details dt {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  padding-top: 1px;
+}
+
+.details dd {
+  margin: 0;
+}
+
+.map {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.capitalize::first-letter {
+  text-transform: uppercase;
+}
+
+@media (max-width: 479px) {
+  .dateTile {
+    display: none;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .actions {
+    flex-direction: row;
+    width: auto;
+  }
+}
+
+.next {
+  width: 100%;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+}
+
+.nextTitle {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.next ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

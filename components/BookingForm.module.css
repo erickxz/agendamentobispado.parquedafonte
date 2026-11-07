@@ -1,0 +1,74 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.prefilled {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.field input {
+  min-height: 48px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid #b8c1cc;
+  border-radius: var(--radius-control);
+  font-size: 16px; /* evita zoom automático no iOS */
+}
+
+.field input:focus-visible {
+  border-color: var(--sky);
+  outline: 2px solid var(--sky);
+  outline-offset: 0;
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.hint {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.error {
+  font-size: 14px;
+  color: var(--danger);
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.submit {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .submit {
+    width: auto;
+    align-self: flex-start;
+  }
+}

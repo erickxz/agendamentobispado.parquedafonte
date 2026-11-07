@@ -1,0 +1,170 @@
+.masthead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 32px 0 28px;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.lead {
+  margin: 10px auto 0;
+  max-width: 600px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+@media (min-width: 640px) {
+  .masthead {
+    padding: 44px 0 36px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}
+
+/* Mobile: agendamento primeiro, depois informações e como funciona. Desktop: lateral à esquerda, agendamento à direita. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "booking"
+    "facts"
+    "howto";
+  gap: 24px;
+  padding-top: 24px;
+  padding-bottom: 56px;
+}
+
+@media (min-width: 880px) {
+  .layout {
+    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "facts booking"
+      "howto booking";
+    column-gap: 40px;
+    row-gap: 32px;
+    padding-top: 40px;
+    align-items: start;
+  }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+}
+
+.facts {
+  grid-area: facts;
+  padding: 4px 20px;
+}
+
+.booking {
+  grid-area: booking;
+  min-width: 0;
+}
+
+.howto {
+  grid-area: howto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.factList {
+  margin: 0;
+}
+
+.factList > div {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.factList > div:last-child {
+  border-bottom: 0;
+}
+
+.factList dt {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.factList dd {
+  margin: 2px 0 0;
+}
+
+.line {
+  display: block;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.mapLink {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sideTitle {
+  font-size: 18px;
+}
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 40px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.steps li strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.help {
+  font-size: 14px;
+  color: var(--muted);
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}

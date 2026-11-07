@@ -1,0 +1,38 @@
+.footer {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+}
+
+.admin {
+  color: var(--muted);
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .admin {
+    align-self: center;
+  }
+}

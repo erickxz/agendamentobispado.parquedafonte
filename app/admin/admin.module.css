@@ -1,0 +1,257 @@
+.main {
+  padding-top: 32px;
+  padding-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.lead {
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  padding: 24px var(--gutter);
+}
+
+@media (min-width: 640px) {
+  .panel {
+    padding: 28px;
+  }
+}
+
+.loginPanel {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.field input {
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid #b8c1cc;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font-size: 16px;
+}
+
+.field input:focus-visible {
+  border-color: var(--sky);
+  outline: 2px solid var(--sky);
+  outline-offset: 0;
+}
+
+/* Seletor de período */
+.tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.tab {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--navy);
+  font-size: 16px;
+  transition: background-color var(--motion) ease;
+}
+
+.tab:last-child {
+  border-right: 0;
+}
+
+.tab:hover {
+  background: var(--sky-soft);
+}
+
+.tabActive,
+.tabActive:hover {
+  background: var(--navy);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Lista */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px var(--gutter);
+  border-bottom: 1px solid var(--line);
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+@media (min-width: 640px) {
+  .item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+  }
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.meta::first-letter {
+  text-transform: uppercase;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.sent {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--success);
+}
+
+.empty {
+  color: var(--muted);
+  padding: 24px 20px;
+}
+
+.itemError {
+  font-size: 14px;
+  color: var(--danger);
+}
+
+
+.summary {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: -12px;
+}
+
+/* Navegação do painel */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: -8px;
+}
+
+.nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+}
+
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: var(--navy);
+}
+
+.nav a[aria-current="page"] {
+  color: var(--navy);
+  border-bottom-color: var(--navy);
+}
+
+.noPhone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.phoneForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 6px;
+}
+
+.phoneForm input {
+  min-height: 44px;
+  width: 180px;
+  padding: 0 12px;
+  border: 1px solid #b8c1cc;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font-size: 16px;
+}
+
+.phoneForm input:focus-visible {
+  border-color: var(--sky);
+  outline: 2px solid var(--sky);
+  outline-offset: 0;
+}
+
+.phoneForm :global(.btn) {
+  min-height: 44px;
+}

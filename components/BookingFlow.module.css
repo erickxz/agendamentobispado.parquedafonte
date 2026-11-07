@@ -1,0 +1,205 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.body {
+  padding: 20px var(--gutter) 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+@media (min-width: 640px) {
+  .body {
+    padding: 28px 28px 32px;
+  }
+}
+
+/* Indicador de etapas: três colunas iguais, marcador em cima e nome embaixo, linha ligando os centros. */
+.stepper {
+  list-style: none;
+  margin: 0;
+  padding: 14px 8px 12px;
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+@media (min-width: 640px) {
+  .stepper {
+    padding: 16px 28px 14px;
+  }
+}
+
+.stepItem {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Linha até a próxima etapa, do fim deste marcador ao início do próximo */
+.stepItem:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: calc(50% + 20px);
+  right: calc(-50% + 20px);
+  height: 2px;
+  border-radius: 1px;
+  background: var(--line);
+  transition: background-color var(--motion) ease;
+}
+
+.stepItem[data-state="done"]:not(:last-child)::after {
+  background: var(--navy);
+}
+
+.stepMarker {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  transition:
+    background-color var(--motion) ease,
+    border-color var(--motion) ease,
+    color var(--motion) ease;
+}
+
+.stepLabel {
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+  .stepItem {
+    font-size: 14px;
+  }
+}
+
+.stepItem[data-state="current"] {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.stepItem[data-state="current"] .stepMarker {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--sky-soft);
+}
+
+.stepItem[data-state="done"] {
+  color: var(--ink);
+}
+
+.stepItem[data-state="done"] .stepMarker {
+  background: var(--sky-soft);
+  border-color: var(--navy);
+}
+
+/* Traço de concluído desenhado em CSS */
+.stepItem[data-state="done"] .stepMarker::after {
+  content: "";
+  width: 6px;
+  height: 11px;
+  border: solid var(--navy);
+  border-width: 0 2px 2px 0;
+  transform: translateY(-1px) rotate(45deg);
+}
+
+/* Seções */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  scroll-margin-top: 16px;
+}
+
+.formStep {
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  gap: 18px;
+  animation: reveal 180ms ease-out;
+}
+
+.headingRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.heading {
+  font-size: 18px;
+}
+
+.headingMeta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.selection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 10px 16px;
+  background: var(--sky-soft);
+  border: 1px solid color-mix(in srgb, var(--sky) 40%, transparent);
+  border-left: 3px solid var(--sky);
+  border-radius: var(--radius-control);
+}
+
+.selectionText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.selectionLabel {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.selectionValue {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.selection :global(.link-button) {
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 16px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-control);
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

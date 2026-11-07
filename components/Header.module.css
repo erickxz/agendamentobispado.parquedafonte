@@ -1,0 +1,95 @@
+.header {
+  background: var(--navy);
+  border-bottom: 3px solid var(--sky);
+  color: #fff;
+}
+
+/* .header .inner vence o padding da classe global .container */
+.header .inner {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* O símbolo é traço preto sobre transparente: o fundo branco em arco reproduz a forma oficial. */
+.symbol {
+  height: 56px;
+  width: auto;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 50% 50% 3px 3px / 25% 25% 3px 3px;
+}
+
+.divider {
+  align-self: stretch;
+  width: 1px;
+  margin: 4px 0;
+  background: rgb(255 255 255 / 0.28);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.sub {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 6px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #c3cfdc;
+}
+
+/* No celular a linha da Igreja fica de fora para não quebrar em três linhas. */
+.church,
+.dot {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .header .inner {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .symbol {
+    height: 72px;
+  }
+
+  .lockup {
+    gap: 20px;
+  }
+
+  .name {
+    font-size: 26px;
+  }
+
+  .sub {
+    font-size: 14px;
+  }
+
+  .church,
+  .dot {
+    display: inline;
+  }
+}

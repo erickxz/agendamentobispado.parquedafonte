@@ -1,0 +1,84 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.stepper {
+  padding: 16px var(--gutter);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.stepBar {
+  height: 24px;
+  width: 70%;
+}
+
+.body {
+  padding: 20px var(--gutter) 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .stepper {
+    padding: 16px 28px;
+  }
+
+  .body {
+    padding: 28px;
+  }
+}
+
+.block {
+  background: var(--disabled-bg);
+  border-radius: var(--radius-control);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.title {
+  height: 20px;
+  width: 40%;
+}
+
+.days {
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.day {
+  flex: 0 0 76px;
+  height: 108px;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .slots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.slot {
+  height: 56px;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+  }
+}
