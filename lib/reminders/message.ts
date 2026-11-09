@@ -5,9 +5,11 @@ export interface ReminderData {
   nome: string;
   start: DateTime;
   local: string;
+  /** Frase final: link para remarcar/cancelar, ou pedido para avisar por mensagem. */
+  remarcar: string;
 }
 
-/** Preenche o modelo da config: {nome}, {nomeCompleto}, {dia}, {data}, {hora}, {local}. */
+/** Preenche o modelo da config: {nome}, {nomeCompleto}, {dia}, {data}, {hora}, {local}, {remarcar}. */
 export function buildReminderMessage(template: string, data: ReminderData): string {
   const start = data.start.setZone(TZ).setLocale(LOCALE);
   const values: Record<string, string> = {
@@ -18,6 +20,7 @@ export function buildReminderMessage(template: string, data: ReminderData): stri
     data: start.toFormat("dd/MM"),
     hora: start.toFormat("HH:mm"),
     local: data.local,
+    remarcar: data.remarcar,
   };
   return template.replace(/\{(\w+)\}/g, (match, key: string) => values[key] ?? match);
 }

@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       timeLabel: formatTime(b.start),
       lembreteEnviado: b.lembreteEnviado,
       lembreteEnviadoEm: b.lembreteEnviadoEm ? formatSentAt(b.lembreteEnviadoEm) : null,
-      reminderUrl: prepareReminder(b).url ?? null,
+      reminderUrl: prepareReminder(b, request.nextUrl.origin).url ?? null,
     }));
     return NextResponse.json({ items }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {

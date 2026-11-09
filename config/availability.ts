@@ -75,7 +75,7 @@ export const availability: AvailabilityConfig = {
   },
 
   reminderTemplate:
-    "Olá, {nome}! Passando para lembrar da sua entrevista com o bispado {dia}, {data}, às {hora}, na {local}. Se não puder comparecer, é só avisar por aqui.",
+    "Olá, {nome}! Passando para lembrar da sua entrevista com o bispado {dia}, {data}, às {hora}, na {local}. {remarcar}",
 
   secretaryWhatsApp: "",
 };

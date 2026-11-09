@@ -16,6 +16,8 @@ import styles from "./MemberPortal.module.css";
 
 interface Props {
   loggedIn: boolean;
+  /** Número vindo do link do lembrete (?tel=), em E.164. */
+  linkPhone: string | null;
   secretaryWhatsApp: string | null;
 }
 
@@ -46,25 +48,34 @@ function noAuto(): boolean {
   }
 }
 
-export function MemberPortal({ loggedIn, secretaryWhatsApp }: Props) {
-  // "auto": tenta entrar sozinho com o número salvo neste aparelho (de quem já marcou por aqui).
+export function MemberPortal({ loggedIn, linkPhone, secretaryWhatsApp }: Props) {
+  // "auto": tenta entrar sozinho com o número do link do lembrete ou o salvo neste aparelho.
   const [view, setView] = useState<"auto" | "login" | "list">(loggedIn ? "list" : "auto");
 
   useEffect(() => {
     if (view !== "auto") return;
+    // O número do link vale mesmo depois de "Usar outro número": a pessoa abriu o próprio lembrete.
     const saved = readSavedContact();
-    if (!saved?.telefone || noAuto() || !phoneSchema.safeParse(saved.telefone).success) {
+    const telefone = linkPhone ?? (noAuto() ? null : saved?.telefone);
+    if (!telefone || !phoneSchema.safeParse(telefone).success) {
       setView("login");
       return;
     }
     fetch("/api/member/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ telefone: saved.telefone }),
+      body: JSON.stringify({ telefone }),
     })
-      .then((res) => setView(res.ok ? "list" : "login"))
-      .catch(() => setView("login"));
-  }, [view]);
+      .then((res) => {
+        if (res.ok && linkPhone) setNoAuto(false);
+        setView(res.ok ? "list" : "login");
+      })
+      .catch(() => setView("login"))
+      .finally(() => {
+        // Tira o ?tel= da barra de endereço para não ficar no histórico nem ser compartilhado sem querer.
+        if (linkPhone) window.history.replaceState(null, "", window.location.pathname);
+      });
+  }, [view, linkPhone]);
 
   async function logout() {
     setNoAuto(true);
