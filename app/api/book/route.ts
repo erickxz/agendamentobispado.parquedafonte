@@ -1,10 +1,11 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, after, type NextRequest } from "next/server";
 import { availability, locationText, mapsUrl } from "@/config/availability";
 import { createBookingEvent } from "@/lib/google/events";
 import { getBusyIntervals, invalidateBusyCache } from "@/lib/google/freebusy";
 import { listMarks } from "@/lib/google/marks";
 import { setMemberCookie } from "@/lib/memberAuth";
 import { icsPath, memberGoogleCalendarUrl } from "@/lib/memberCalendar";
+import { notifyBookingChange } from "@/lib/notify";
 import type { BookingConfirmationDto } from "@/lib/presenters";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { findValidSlot, overlapsBusy } from "@/lib/slots";
@@ -70,6 +71,7 @@ export async function POST(request: NextRequest) {
     const result = await createBookingEvent(slot, nome, telefone);
     if (result.status === "taken") return error(409, SLOT_TAKEN, "slot_taken");
     invalidateBusyCache();
+    after(() => notifyBookingChange({ kind: "created", nome, telefone, start: slot.start }));
 
     const confirmation: BookingConfirmationDto = {
       start: slot.start.toISO()!,

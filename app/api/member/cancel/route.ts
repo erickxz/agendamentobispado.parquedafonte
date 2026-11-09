@@ -1,8 +1,9 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, after, type NextRequest } from "next/server";
 import { cancelBooking, getBooking } from "@/lib/google/events";
 import { invalidateBusyCache } from "@/lib/google/freebusy";
 import { getMemberPhone } from "@/lib/memberAuth";
 import { canMemberChange } from "@/lib/memberBookings";
+import { notifyBookingChange } from "@/lib/notify";
 import { nowInTz } from "@/lib/time";
 import { memberCancelSchema } from "@/lib/validation";
 
@@ -29,6 +30,9 @@ export async function POST(request: NextRequest) {
     }
     await cancelBooking(booking.eventId);
     invalidateBusyCache();
+    after(() =>
+      notifyBookingChange({ kind: "cancelled", nome: booking.nome, telefone: booking.telefone, start: booking.start }),
+    );
     console.info("[member/cancel] entrevista cancelada pelo membro", { eventId: booking.eventId });
     return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {

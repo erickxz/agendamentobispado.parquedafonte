@@ -54,4 +54,15 @@ export function getUpstashEnv(): { url: string; token: string } | null {
   return url && token ? { url, token } : null;
 }
 
+/** Gmail usado para avisar o secretário por e-mail. null = avisos desligados. */
+export function getMailEnv(): { user: string; pass: string; to: string[] } | null {
+  const user = process.env.GMAIL_USER?.trim();
+  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, ""); // a senha de app vem com espaços: "abcd efgh ..."
+  const to = (process.env.NOTIFY_EMAIL_TO ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return user && pass && to.length > 0 ? { user, pass, to } : null;
+}
+
 export const isProduction = process.env.NODE_ENV === "production";

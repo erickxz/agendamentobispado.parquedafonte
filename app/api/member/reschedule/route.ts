@@ -1,10 +1,11 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, after, type NextRequest } from "next/server";
 import { availability } from "@/config/availability";
 import { cancelBooking, createBookingEvent, getBooking } from "@/lib/google/events";
 import { getBusyIntervals, invalidateBusyCache } from "@/lib/google/freebusy";
 import { listMarks } from "@/lib/google/marks";
 import { getMemberPhone } from "@/lib/memberAuth";
 import { canMemberChange, toMemberAppointmentDto, withoutInterval } from "@/lib/memberBookings";
+import { notifyBookingChange } from "@/lib/notify";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { findValidSlot, overlapsBusy } from "@/lib/slots";
 import { nowInTz, parseInstant } from "@/lib/time";
@@ -71,6 +72,15 @@ export async function POST(request: NextRequest) {
       throw err;
     }
     invalidateBusyCache();
+    after(() =>
+      notifyBookingChange({
+        kind: "rescheduled",
+        nome: booking.nome,
+        telefone: phone,
+        start: slot.start,
+        previousStart: booking.start,
+      }),
+    );
     console.info("[member/reschedule] entrevista remarcada pelo membro", { from: booking.eventId, to: created.eventId });
 
     const item = toMemberAppointmentDto(
