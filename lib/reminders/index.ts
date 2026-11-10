@@ -1,4 +1,4 @@
-import { availability, locationText } from "@/config/availability";
+import { availability } from "@/config/availability";
 import type { Booking } from "../google/events";
 import { buildReminderMessage } from "./message";
 import { waMeChannel } from "./waMe";
@@ -24,12 +24,12 @@ export const reminderChannel: ReminderChannel = waMeChannel;
 export function prepareReminder(booking: Booking, siteUrl?: string): { message: string; url?: string } {
   const canSelfServe = booking.origem === "site" && booking.telefone && siteUrl;
   const remarcar = canSelfServe
-    ? `Não vai conseguir ir? Remarque ou cancele aqui: ${memberLink(siteUrl, booking.telefone)}`
-    : "Se não puder comparecer, é só avisar por aqui.";
+    ? `🔁 Não vai conseguir ir? Remarque ou cancele aqui:\n${memberLink(siteUrl, booking.telefone)}`
+    : "Se não puder comparecer, é só avisar por aqui. 🙏";
   const message = buildReminderMessage(availability.reminderTemplate, {
     nome: booking.nome,
     start: booking.start,
-    local: locationText(availability),
+    local: `${availability.location.name}\n${availability.location.address}`,
     remarcar,
   });
   return { message, ...reminderChannel.prepare({ telefone: booking.telefone, message }) };

@@ -35,7 +35,8 @@ export interface AvailabilityConfig {
   location: { name: string; address: string };
   /**
    * Mensagem do lembrete por WhatsApp. Variáveis disponíveis:
-   * {nome} (primeiro nome), {nomeCompleto}, {dia} (dia da semana), {data} (dd/mm), {hora}, {local}
+   * {nome} (primeiro nome), {nomeCompleto}, {quando} ("hoje", "amanhã" ou o dia da semana),
+   * {dia} (dia da semana), {diaData} ("Terça-feira, 17/11"), {data} (dd/mm), {hora}, {local}, {remarcar}
    */
   reminderTemplate: string;
   /** WhatsApp do secretário em E.164 sem "+" (ex.: "5541999998888"). Vazio esconde o link de contato. */
@@ -74,8 +75,17 @@ export const availability: AvailabilityConfig = {
     address: "Rua Tavares de Lyra, 1859 – Iná, São José dos Pinhais – PR, 83065-180",
   },
 
-  reminderTemplate:
-    "Olá, {nome}! Passando para lembrar da sua entrevista com o bispado {dia}, {data}, às {hora}, na {local}. {remarcar}",
+  reminderTemplate: [
+    "Olá, {nome}! 👋",
+    "",
+    "Passando para lembrar da sua entrevista com o bispado, que é *{quando}*.",
+    "",
+    "📅 {diaData}",
+    "🕒 {hora}",
+    "📍 {local}",
+    "",
+    "{remarcar}",
+  ].join("\n"),
 
   secretaryWhatsApp: "",
 };
