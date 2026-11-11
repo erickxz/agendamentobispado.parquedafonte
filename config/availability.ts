@@ -61,7 +61,7 @@ export const availability: AvailabilityConfig = {
 
   durationMinutes: 30,
   bufferMinutes: 0,
-  minNoticeHours: 12,
+  minNoticeHours: 1,
   daysAhead: 21,
 
   blockedDates: [
